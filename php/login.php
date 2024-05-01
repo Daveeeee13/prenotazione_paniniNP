@@ -10,7 +10,7 @@ if(isset($_SESSION["AUTENTICATO"]) and $_SESSION["AUTENTICATO"]=="ok"){
 
 if (isset($_POST["login"])) {
     try {
-        $connessione = mysqli_connect("localhost", "root", "root", "progettoinglese");
+        $connessione = mysqli_connect("localhost", "root", "root", "panini");
 
         // Prevenzione SQL injection
         $username = mysqli_real_escape_string($connessione, $_POST["username"]);

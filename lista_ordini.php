@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <?php 
 session_start();
 if(!$_SESSION["AUTENTICATO"]=="ok"){
@@ -13,7 +12,9 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Prenotazione - NewtonPertini</title>
+  <title>Bar NP - I tuoi ordini</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
@@ -45,7 +46,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 <body>
 
   <!-- ======= Top Bar ======= -->
-  <section id="topbar" class="d-flex align-items-center fixed-top topbar-transparent">
+  <section id="topbar" class="d-flex align-items-center fixed-top ">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-center justify-content-lg-start">
       <i class="bi bi-phone d-flex align-items-center"><span>+39 boh</span></i>
       <i class="bi bi-clock ms-4 d-none d-lg-flex align-items-center"><span>Lun-Sab: 10:40 - 10:55</span></i>
@@ -64,10 +65,6 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#menu">Menu</a></li>
-          <li><a class="nav-link scrollto" href="#book-a-table">Prenota</a></li>
-          <li><a class="nav-link scrollto" href="#book-a-table">Prenotazioni attive</a></li>
           <?php 
           //controllo se l'utente è amministratore, per far comparire il menu a discesa dedicato all'amministrazione
               try {
@@ -82,7 +79,8 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
                   if($array["ruolo"]=="admin"){
                     ?>
 
-                    <li class="dropdown"><a href="#"><span>Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
+                          <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
+
                                 <ul>
                                   <li><a href="#">Drop Down 1</a></li>
                                   <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
@@ -119,147 +117,87 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
     </div>
   </header><!-- End Header -->
 
-  <!-- ======= Hero Section ======= -->
-  <section id="hero">
-    <div class="hero-container">
-      <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
-
-        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
-
-        <div class="carousel-inner" role="listbox">
-
-          <!-- Slide 1 -->
-          <div class="carousel-item active" style="background-image: url(assets/img/sandwich.jpg);">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown"><span>Bar</span> NewtonPertini</h2>
-                <p class="animate__animated animate__fadeInUp">Gusta le nostre prelibatezze previo vendita di 3 reni</p>
-                <div>
-                  <a href="#menu" class="btn-menu animate__animated animate__fadeInUp scrollto">Menu</a>
-                  <a href="#book-a-table" class="btn-book animate__animated animate__fadeInUp scrollto">Prenota!</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </section><!-- End Hero -->
-
   <main id="main">
 
-    <!-- ======= Menu Section ======= -->
-    <section id="menu" class="menu">
+    <!-- ======= Breadcrumbs Section ======= -->
+    <section class="breadcrumbs">
       <div class="container">
 
-        <div class="section-title">
-          <h2>Consulta il nostro <span>Menu</span></h2>
-        </div>
-
-        <?php 
-          echo $_SESSION["USER"];
-        ?>
-
-        <div class="row">
-          <div class="col-lg-12 d-flex justify-content-center">
-            <ul id="menu-flters">
-              <li data-filter="*" class="filter-active">Mostra tutto</li>
-              <li data-filter=".filter-panino">Panini</li>
-              <li data-filter=".filter-brioche">Brioche</li>
-              <li data-filter=".filter-pizza">Pizze</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="row menu-container">
-
-        <?php 
-         try {
-          $connessione = mysqli_connect("localhost", "root", "root", "panini");
-          
-          $sql = "SELECT * FROM listino;";
-          
-          $risultato = $connessione->query($sql);
-              while ($array = mysqli_fetch_assoc($risultato)) {
-                //echo $array["tipo"];
-                  //print_r($array);
-                  ?>
-                 
-                    <div class="col-lg-6 menu-item "<?php echo "filter-".$array["tipo"]?>>
-                        <div class="menu-content">
-                          <a href="#"><?php echo $array["nome"]?></a><span>€<?php echo $array["prezzo"]?></span>
-                        </div>
-                        <div class="menu-ingredients">
-                          <?php echo $array["ingredienti"]?>
-                        </div>
-                      </div>
-                  <?php
-              }
-        }catch (Exception $e) {
-          
-      }
-        ?>
-
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Lista Prenotazioni</h2>
+          <ol>
+            <li><a href="index.php">Home</a></li>
+            <li>Prenotazioni Eseguite</li>
+          </ol>
         </div>
 
       </div>
-    </section><!-- End Menu Section -->
+    </section><!-- End Breadcrumbs Section -->
 
-    <!-- ======= Book A Table Section ======= -->
-    <section id="book-a-table" class="book-a-table">
+    <section class="inner-page">
       <div class="container">
-
-        <div class="section-title">
-          <h2>Effettua la <span>prenotazione</span> . . .</h2>
-          <p>. . . e sei sicuro di mangiare!</p>
-        </div>
-
-        <form action="index.php" method="post" role="form" class="php-email-form">
-          <div class="row">
-            <div class="col-lg-4 col-md-6 form-group mt-3">
-              <input type="date" class="form-control" name="data" id="data" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" placeholder="Scegli la data...">
-              <div class="validate"></div>
-            </div>
-            
-          </div>
-          <div class="form-group mt-3">
-            <textarea class="form-control" name="message" rows="5" placeholder="Inserisci qui la prenotazione seguendo il formato 'quantità prodotto,'&nbsp;Es: 3 panini prosciutto cotto, 1 pizza"></textarea>
-            <div class="validate"></div>
-          </div>
-          <div class="mb-3">
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Prenotazione confermata</div>
-          </div>
-          <div class="text-center"><button type="submit">Send Message</button></div>
-        </form>
-
+      <?php
+	// Qui il ciclo di lettura delle righe del file e corrispondente creazione delle
+	// righe della tabella.
+	try {
+		//al posto di localhost solitamente si inserisce l'IP
+		$connessione = mysqli_connect("localhost", "root", "root", "panini");
+		//query 
+		$sql ="SELECT * FROM prenotazioni WHERE username='$_SESSION[USER]'";  
+	
+		$risultato = $connessione->query($sql);
+		$num_righe = $risultato->num_rows;
+		if ($num_righe > 0) {
+			echo "<table id='utenti' class='tabella'>
+				<tr>
+					<th>N° prenotazione (per ritiro)</th>
+					<th>Data ritiro</th>
+					<th>Contenuto</th>
+				</tr>";
+			while ($arr = $risultato->fetch_assoc()) {
+				$riga="<td>".$arr['n_prenotazione']."'</td><td>".$arr["data_ritiro"]."</td><td>".$arr["messaggio"]."</td>";
+				echo $riga;
+			}
+			echo "</table>";
+		}
+	}
+	catch (Exception $e) {
+		// Gestione dell'errore tramite try-catch:
+		// https://www.w3schools.com/php/php_exceptions.asp
+		// gestione dell'eccezione: https://www.php.net/manual/en/language.exceptions.php
+		$msg = "ERRORE: ".$e->getMessage();
+	}
+	// Controllo se la stringa $msg contiene errori
+	// https://www.w3schools.com/php/func_var_empty.asp
+	if (!empty($msg))
+		echo $msg;
+?>
       </div>
-    </section><!-- End Book A Table Section -->
+    </section>
 
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
-      <h3>Bar NewtonPertini</h3>
-      <p>Prodotti offerti da nomeAzienda</p>
+      <h3>Delicious</h3>
+      <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi placeat.</p>
       <div class="social-links">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
         <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
         <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
       </div>
       <div class="copyright">
-        &copy; Copyright <strong><span>Bar NewtonPertini</span></strong>.
+        &copy; Copyright <strong><span>Delicious</span></strong>. All Rights Reserved
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/delicious-free-restaurant-bootstrap-theme/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>,
-        Developed by <a href="https://carrarodavide.it">Davide Carraro</a>
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
   </footer><!-- End Footer -->

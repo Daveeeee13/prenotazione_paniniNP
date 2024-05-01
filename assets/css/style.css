@@ -1602,3 +1602,21 @@ section {
 #footer .credits {
   font-size: 13px;
 }
+
+.tabella {
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.tabella th {
+  border: 1px solid green;
+  height: 3em;
+  margin-bottom: 20px;
+  background-color: lightyellow;
+  font-family: sans-serif;
+}
+
+.tabella td {
+  border: 1px solid green;
+  padding: 0.3em;
+}
