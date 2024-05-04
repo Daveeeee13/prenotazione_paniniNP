@@ -150,10 +150,16 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 				<tr>
 					<th>N° prenotazione (per ritiro)</th>
 					<th>Data ritiro</th>
-					<th>Contenuto</th>
+					<th>Quantità panino con cotto</th>
+          <th>Quantità panino con soppressa</th>
+          <th>Quantità panino con crudo</th>
+          <th>Quantità panino con formaggio</th>
+          <th>Quantità pizza margherita</th>
+          <th>Quantità brioche</th>
+          <th>Plesso Ritiro</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['n_prenotazione']."'</td><td>".$arr["data_ritiro"]."</td><td>".$arr["messaggio"]."</td></tr>";
+				$riga="<tr><td>".$arr['n_prenotazione']."'</td><td>".$arr["data_ritiro"]."</td><td>".$arr["Panino con cotto"]."</td><td>".$arr["Panino con soppressa"]."</td><td>".$arr["Panino con crudo"]."</td><td>".$arr["Panino con formaggio"]."</td><td>".$arr["Pizza Margherita"]."</td><td>".$arr["Brioche"]."</td><td>".$arr["plesso_ritiro"]."</td></tr>";
 				echo $riga;
 			}
 			echo "</table>";

@@ -11,12 +11,12 @@ session_start();
 
         $connessione = mysqli_connect("localhost", "root", "root", "panini");
         
-        $sql = "INSERT INTO prenotazioni (data_ritiro, username, messaggio) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO prenotazioni (data_ritiro, username, Panino con cotto, Pizza Margherita, Panino con soppressa, Panino con crudo, Panino con formaggio, Brioche, plesso_ritiro) VALUES (?, ?, ?, ?)";
             $stmt = mysqli_prepare($connessione, $sql);
 
             if ($stmt) {
                 //sss indica che sono 3 stringhe
-                mysqli_stmt_bind_param($stmt, "sss", $_POST["data"], $_SESSION["USER"], $_POST["messaggio"]);
+                mysqli_stmt_bind_param($stmt, "sssssssss", $_POST["data"], $_SESSION["USER"], $_POST["Panino con cotto"], $_POST["Pizza Margherita"], $_POST["Panino con soppressa"], $_POST["Panino con crudo"], $_POST["Panino con formaggio"], $_POST["Brioche"] , $_POST["plesso"]);
 
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_close($stmt);
@@ -45,7 +45,7 @@ session_start();
 
 <body onload="">
     <div class="login-container">
-        <h2>Prenotazione effettuata correttamente a numero <?php echo $_GET["numero_prenotazione"]?></h2>
+        <h2>Prenotazione effettuata correttamente a numero <?php //echo $_GET["numero_prenotazione"]?></h2>
         
         <button><a href="prenotazioni.php">Visualizza tutti i tuoi ordini</a></button>
     </div>

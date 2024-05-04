@@ -220,8 +220,49 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
             </div>
             
           </div>
-          <div class="form-group mt-3">
+          <!--<div class="form-group mt-3">
             <textarea class="form-control" name="messaggio" rows="5" placeholder="Inserisci qui la prenotazione seguendo il formato 'quantità prodotto,'&nbsp;Es: 3 panini prosciutto cotto, 1 pizza"></textarea>
+            <div class="validate"></div>
+          </div>-->
+      <br>
+          <?php 
+          
+          try {
+            $connessione = mysqli_connect("localhost", "root", "root", "panini");
+            
+            $sql = "SELECT * FROM listino;";
+            
+            $risultato = $connessione->query($sql);
+                while ($array = mysqli_fetch_assoc($risultato)) {
+                  
+                  echo $array["nome"]." : " ?>
+                  <select name=<?php echo $array["nome"]?>>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                  </select><br></br>
+
+                  <?php
+                }
+          }catch (Exception $e) {
+            
+        }
+          
+          ?>
+
+
+          <div class="form-group mt-3">
+      <b>Plesso presso la quale ritirare l'ordine: </b>
+            <select name="plesso">
+              <option value="Newton">Newton</option>
+              <option value="Pertini">Pertini</option>
+            </select>
             <div class="validate"></div>
           </div>
           <div class="mb-3">

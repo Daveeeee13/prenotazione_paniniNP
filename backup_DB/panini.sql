@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mag 03, 2024 alle 21:45
+-- Creato il: Mag 04, 2024 alle 16:49
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -44,7 +44,9 @@ INSERT INTO `listino` (`id`, `nome`, `quantita`, `ingredienti`, `prezzo`, `tipo`
 (1, 'Panino con cotto', 40, 'prosciutto cotto', 2.5, 'panino'),
 (2, 'Pizza Margherita', 35, 'pomodoro, mozzarella', 2.5, 'pizza'),
 (3, 'Panino con soppressa', 30, 'soppressa', 2.5, 'panino'),
-(4, 'Panino con crudo', 35, 'prosciutto crudo', 2.5, 'panino');
+(4, 'Panino con crudo', 35, 'prosciutto crudo', 2.5, 'panino'),
+(5, 'Panino con formaggio', 40, 'formaggio asiago', 2.5, 'panino'),
+(6, 'Brioche', 70, 'burro, crema chantilly', 3, 'brioche');
 
 -- --------------------------------------------------------
 
@@ -56,16 +58,21 @@ CREATE TABLE `prenotazioni` (
   `n_prenotazione` int(11) NOT NULL,
   `data_ritiro` date NOT NULL,
   `username` varchar(30) NOT NULL COMMENT 'username che ha eseguito la prenotazione',
-  `messaggio` varchar(500) NOT NULL
+  `Panino con cotto` varchar(30) NOT NULL,
+  `Pizza Margherita` varchar(30) NOT NULL,
+  `Panino con soppressa` varchar(30) NOT NULL,
+  `Panino con crudo` varchar(30) NOT NULL,
+  `Panino con formaggio` varchar(30) NOT NULL,
+  `Brioche` varchar(30) NOT NULL,
+  `plesso_ritiro` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dump dei dati per la tabella `prenotazioni`
 --
 
-INSERT INTO `prenotazioni` (`n_prenotazione`, `data_ritiro`, `username`, `messaggio`) VALUES
-(1, '2024-05-03', 'davide.c', '1 panino prosciutto cotto, 3 pizze'),
-(17, '2024-05-16', 'davide.c', 'test');
+INSERT INTO `prenotazioni` (`n_prenotazione`, `data_ritiro`, `username`, `Panino con cotto`, `Pizza Margherita`, `Panino con soppressa`, `Panino con crudo`, `Panino con formaggio`, `Brioche`, `plesso_ritiro`) VALUES
+(1, '2024-05-03', 'davide.c', '1', '0', '0', '0', '0', '1', 'Newton');
 
 -- --------------------------------------------------------
 
@@ -127,13 +134,13 @@ ALTER TABLE `utente`
 -- AUTO_INCREMENT per la tabella `listino`
 --
 ALTER TABLE `listino`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT per la tabella `prenotazioni`
 --
 ALTER TABLE `prenotazioni`
-  MODIFY `n_prenotazione` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `n_prenotazione` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
