@@ -70,45 +70,20 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
           <li><a class="nav-link scrollto" href="prenotazioni.php">Prenotazioni attive</a></li>
           <?php 
           //controllo se l'utente è amministratore, per far comparire il menu a discesa dedicato all'amministrazione
-              try {
-                if($_SESSION["AUTENTICATO"]=="ok"){
-                  $connessione = mysqli_connect("localhost", "root", "root", "panini");
-                
-                  $sql = "SELECT * FROM utente WHERE username='$_SESSION[USER]';";
-                  
-                  $risultato = $connessione->query($sql);
-                  $array=$risultato->fetch_assoc();
-
-                  if($array["ruolo"]=="admin"){
+                  if($_SESSION["RUOLO"]=="admin"){
                     ?>
 
                     <li class="dropdown"><a href="#"><span>Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
-                                  <li><a href="#">Drop Down 1</a></li>
-                                  <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                                    <ul>
-                                      <li><a href="#">Deep Drop Down 1</a></li>
-                                      <li><a href="#">Deep Drop Down 2</a></li>
-                                      <li><a href="#">Deep Drop Down 3</a></li>
-                                      <li><a href="#">Deep Drop Down 4</a></li>
-                                      <li><a href="#">Deep Drop Down 5</a></li>
-                                    </ul>
-                                  </li>
+                                  <li><a href="admin/visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
                                   <li><a href="#">Drop Down 2</a></li>
                                   <li><a href="#">Drop Down 3</a></li>
                                   <li><a href="#">Drop Down 4</a></li>
                                 </ul>
                               </li>
 
-                    <?php
+                  <?php
                   }
-
-                }
-                
-              }catch (Exception $e) {
-                
-              }
-
           ?>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -215,7 +190,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
         <form action="risultato_prenotazione.php" method="post">
         <div class="row">
             <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
-              <input type="date" class="form-control" name="data" id="data" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" placeholder="Scegli la data del ritiro...">
+              <input required type="date" class="form-control" name="data" id="data" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" placeholder="Scegli la data del ritiro...">
               <div class="validate"></div>
             </div>
             
@@ -236,7 +211,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
                 while ($array = mysqli_fetch_assoc($risultato)) {
                   
                   echo $array["nome"]." : " ?>
-                  <select name=<?php echo $array["nome"]?>>
+                  <select name=<?php echo $array["nome_gestionale"]?>>
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>

@@ -1,10 +1,55 @@
 <!DOCTYPE html>
 <?php 
 session_start();
-if(!$_SESSION["AUTENTICATO"]=="ok"){
+if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
     header("Location: php/login.php");
 
 }
+
+if (isset($_POST["invio"])) {
+
+try {			
+ 
+  $connessione = mysqli_connect("localhost", "root", "root", "anagrafica");
+
+  $sql = "SELECT * FROM utente WHERE username = '".$_POST["username"]."';";
+  $risultato = $connessione->query($sql);
+  
+ 
+  if (!$risultato) {
+    $sql = "INSERT INTO utente (cf, username, pwd, nome, cognome, classe, sezione, n_aula, plesso, n_telefono, ruolo, blacklist, data_registrazione) VALUES ('".
+      $_POST["CF"]."','".
+      $_POST["username"]."','".
+      $_POST["pwd"]."','".
+      $_POST["nome"]."','".
+      $_POST["cognome"]."','".
+      $_POST["classe"]."','".
+      $_POST["sezione"]."','".
+      $_POST["n_aula"]."','".
+      $_POST["plesso"]."','".
+      $_POST["n_telefono"]."','".
+      $_POST["ruolo"]."','".
+      "no"."','".
+      date("Y-m-d")
+      ."');";
+      
+    $connessione->query($sql);
+
+  }
+}
+catch (Exception $e) {
+
+}
+$connessione -> close();
+
+header("Location: visualizza_utenti.php");
+    exit();
+}   
+
+
+
+
+
 ?>
 <html lang="en">
 
@@ -15,22 +60,22 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
   <title>Bar NP - I tuoi ordini</title>
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="../assets/css/style.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Delicious
@@ -120,10 +165,10 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Lista Prenotazioni</h2>
+          <h2>Registra utente</h2>
           <ol>
             <li><a href="index.php">Home</a></li>
-            <li>Prenotazioni Eseguite</li>
+            <li>Registra nuovo utente</li>
           </ol>
         </div>
 
@@ -132,60 +177,87 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 
     <section class="inner-page">
       <div class="container">
-      <?php
+     
+      <form action="risultato_prenotazione.php" method="post">
+      <div class="form-group mt-3">
+        <b>CF: </b>
+          <input type="text" required name="CF" id="CF" placeholder="Inserisci il CF dell'utente">
+          <div class="validate"></div>
+        </div>
 
-	try {
+        <div class="form-group mt-3">
+        <b>USERNAME: </b>
+          <input type="text" required name="username" id="username" placeholder="Inserisci l'username">
+          <div class="validate"></div>
+        </div>
+        
+        <div class="form-group mt-3">
+        <b>PASSWORD: </b>
+          <input type="password" required name="pwd" id="pwd" placeholder="Inserisci la password">
+          <div class="validate"></div>
+        </div>
 
-    //VISUALIZZO TUTTE LE PRENOTAZIONI
-		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM prenotazioni WHERE username='$_SESSION[USER]'";  
-	
-		$risultato = $connessione->query($sql);
-		$num_righe = $risultato->num_rows;
-		if ($num_righe > 0) {
-			echo "<table id='utenti' class='tabella'>
-				<tr>
-					<th>N° prenotazione (per ritiro)</th>
-					<th>Data ritiro</th>
-					<th>Quantità panino con cotto</th>
-          <th>Quantità panino con soppressa</th>
-          <th>Quantità panino con crudo</th>
-          <th>Quantità panino con formaggio</th>
-          <th>Quantità pizza margherita</th>
-          <th>Quantità brioche</th>
-          <th>Plesso Ritiro</th>
-          <th>&nbsp;</th>
-				</tr>";
-			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='assets/img/delete_material_design.png' /></a></td></tr>";
-				echo $riga;
-			}
-			echo "</table>";
-		}
-	}
-	catch (Exception $e) {
-	}
+        <div class="form-group mt-3">
+        <b>COGNOME: </b>
+          <input type="text" required name="cognome" id="cognome" placeholder="Inserisci cognome">
+          <div class="validate"></div>
+        </div>
 
-        //RIMOZIONE PRENOTAZIONE
-        if (isset($_GET["numero_prenotazione"])) {
+        <div class="form-group mt-3">
+        <b>NOME: </b>
+          <input type="text" required name="nome" id="nome" placeholder="Inserisci nome">
+          <div class="validate"></div>
+        </div>
 
-          try {
-            $connessione = mysqli_connect("localhost", "root", "root", "panini");
-            
-            $sql = "DELETE FROM prenotazioni WHERE n_prenotazione = ".$_GET["numero_prenotazione"].";";
-            $connessione->query($sql);
-          }
-          catch (Exception $e) {
+        <div class="form-group mt-3">
+        <b>CLASSE: </b>
+        <select required name="classe">
+                    <option value="1">Prima</option>
+                    <option value="2">Seconda</option>
+                    <option value="3">Terza</option>
+                    <option value="4">Quarta</option>
+                    <option value="5">Quinta</option>
+                  </select>
+        </div>
 
-          }
-          $connessione->close();
-          //header("Refresh:0");
-           
-        }	
+        <div class="form-group mt-3">
+        <b>SEZIONE: </b>
+          <input type="text" required name="sezione" id="sezione" placeholder="Inserisci la sezione">
+          <div class="validate"></div>
+        </div>
 
+        <div class="form-group mt-3">
+        <b>N° AULA: </b>
+          <input type="text" required name="n_aula" id="n_aula" placeholder="Inserisci n° aula">
+          <div class="validate"></div>
+        </div>
 
+        <div class="form-group mt-3">
+        <b>PLESSO: </b>
+        <select required name="plesso">
+                    <option value="Newton">Newton</option>
+                    <option value="Pertini">Pertini</option>
+                  </select>
+        </div>
 
-?>
+        <div class="form-group mt-3">
+        <b>N° TELEFONO: </b>
+          +39 <input type="text" required name="n_telefono" id="n_telefono" placeholder="Inserisci n° di telefono">
+          <div class="validate"></div>
+        </div>
+
+        <div class="form-group mt-3">
+        <b>PERMESSO: </b>
+        <select required name="ruolo">
+                    <option value="guest">Guest</option>
+                    <option value="admin">Admin</option>
+                  </select>
+        </div>
+
+        <div class="mb-3">
+        </div>
+        <div class="text-center"><button style="background: #ffa012; border: 0; padding: 10px 24px; border-radius: 50px;" type="submit" name="invio">Inserisci utente nel sistema</button></div>
+      </form>
       </div>
     </section>
 

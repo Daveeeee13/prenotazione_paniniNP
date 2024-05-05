@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
 session_start();
-if(!$_SESSION["AUTENTICATO"]=="ok"){
+if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
     header("Location: php/login.php");
 
 }
@@ -15,22 +15,22 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
   <title>Bar NP - I tuoi ordini</title>
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="../assets/css/style.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Delicious
@@ -138,13 +138,14 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 
     //VISUALIZZO TUTTE LE PRENOTAZIONI
 		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM prenotazioni WHERE username='$_SESSION[USER]'";  
+		$sql ="SELECT * FROM prenotazioni";  
 	
 		$risultato = $connessione->query($sql);
 		$num_righe = $risultato->num_rows;
 		if ($num_righe > 0) {
 			echo "<table id='utenti' class='tabella'>
 				<tr>
+          <th>Utente</th>
 					<th>N° prenotazione (per ritiro)</th>
 					<th>Data ritiro</th>
 					<th>Quantità panino con cotto</th>
@@ -157,7 +158,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
           <th>&nbsp;</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='assets/img/delete_material_design.png' /></a></td></tr>";
+				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
 				echo $riga;
 			}
 			echo "</table>";
