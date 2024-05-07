@@ -76,7 +76,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
                     <li class="dropdown"><a href="#"><span>Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
                                   <li><a href="admin/visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
-                                  <li><a href="#">Drop Down 2</a></li>
+                                  <li><a href="admin/blacklista_utente.php">Blacklista utente</a></li>
                                   <li><a href="#">Drop Down 3</a></li>
                                   <li><a href="#">Drop Down 4</a></li>
                                 </ul>

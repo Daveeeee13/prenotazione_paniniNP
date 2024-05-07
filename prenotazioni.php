@@ -179,7 +179,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 
           }
           $connessione->close();
-          //header("Refresh:0");
+          //header('Location: prenotazioni.php');
            
         }	
 

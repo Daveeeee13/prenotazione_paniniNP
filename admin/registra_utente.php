@@ -57,7 +57,7 @@ header("Location: visualizza_utenti.php");
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Bar NP - I tuoi ordini</title>
+  <title>Bar NP - Registra Utente</title>
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
