@@ -12,7 +12,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Bar NP - Visualizza Prenotazioni</title>
+  <title>Bar NP - Rimuovi Prodotto</title>
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
@@ -113,10 +113,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Lista Prenotazioni</h2>
+          <h2>Rimuovi Prodotto</h2>
           <ol>
-            <li><a href="index.php">Home</a></li>
-            <li>Prenotazioni Eseguite</li>
+            <li><a href="../index.php">Home</a></li>
+            <li>Rimuovi Prodotto</li>
           </ol>
         </div>
 
@@ -129,30 +129,26 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
 	try {
 
-    //VISUALIZZO TUTTE LE PRENOTAZIONI
 		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM prenotazioni";  
+		$sql ="SELECT * FROM listino";  
 	
 		$risultato = $connessione->query($sql);
 		$num_righe = $risultato->num_rows;
 		if ($num_righe > 0) {
 			echo "<table id='utenti' class='tabella'>
 				<tr>
-          <th>Utente</th>
-					<th>N° prenotazione (per ritiro)</th>
-					<th>Data ritiro</th>
-					<th>Quantità panino con cotto</th>
-          <th>Quantità panino con soppressa</th>
-          <th>Quantità panino con crudo</th>
-          <th>Quantità panino con formaggio</th>
-          <th>Quantità pizza margherita</th>
-          <th>Quantità brioche</th>
-          <th>Plesso Ritiro</th>
+          <th>id</th>
+					<th>Nome</th>
+					<th>Quantità</th>
+					<th>Ingredienti</th>
+          <th>Prezzo</th>
           <th>&nbsp;</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
-				echo $riga;
+        //questo controllo serve per controllare se l'utente è blacklistato o no, facendo così l'immagine cambierà a seconda se l'utente è blacklistato o meno
+
+          $riga="<tr><td>".$arr['id']."</td><td>".$arr['nome']."</td><td>".$arr["quantita"]."</td><td>".$arr["ingredienti"]."</td><td>".$arr["prezzo"]."</td><td><a href='rimuovi_prodotto.php?id=$arr[id]'><img src='../assets/img/delete_material_design.png'/></a></td></tr>";
+  				echo $riga;
 			}
 			echo "</table>";
 		}
@@ -160,13 +156,15 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 	catch (Exception $e) {
 	}
 
-        //RIMOZIONE PRENOTAZIONE
-        if (isset($_GET["numero_prenotazione"])) {
+        //AGGIORNAMENTO BLACKLIST
+        
+        if (isset($_GET["id"])) {
 
           try {
             $connessione = mysqli_connect("localhost", "root", "root", "panini");
-            
-            $sql = "DELETE FROM prenotazioni WHERE n_prenotazione = ".$_GET["numero_prenotazione"].";";
+            $sql = "DELETE FROM listino WHERE id='$_GET[id]'";
+              $risultato = $connessione->query($sql);
+                
             $connessione->query($sql);
           }
           catch (Exception $e) {

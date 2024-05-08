@@ -113,10 +113,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Lista Prenotazioni</h2>
+          <h2>Utenti presenti nel sistema</h2>
           <ol>
             <li><a href="index.php">Home</a></li>
-            <li>Prenotazioni Eseguite</li>
+            <li>Lista Utenti</li>
           </ol>
         </div>
 
@@ -131,27 +131,28 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
     //VISUALIZZO TUTTE LE PRENOTAZIONI
 		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM prenotazioni";  
+		$sql ="SELECT * FROM utente";  
 	
 		$risultato = $connessione->query($sql);
 		$num_righe = $risultato->num_rows;
 		if ($num_righe > 0) {
 			echo "<table id='utenti' class='tabella'>
 				<tr>
-          <th>Utente</th>
-					<th>N° prenotazione (per ritiro)</th>
-					<th>Data ritiro</th>
-					<th>Quantità panino con cotto</th>
-          <th>Quantità panino con soppressa</th>
-          <th>Quantità panino con crudo</th>
-          <th>Quantità panino con formaggio</th>
-          <th>Quantità pizza margherita</th>
-          <th>Quantità brioche</th>
-          <th>Plesso Ritiro</th>
-          <th>&nbsp;</th>
+          <th>CF</th>
+					<th>Username</th>
+					<th>Nome</th>
+					<th>Cognome</th>
+          <th>Classe</th>
+          <th>Sezione</th>
+          <th>N° Aula</th>
+          <th>Plesso</th>
+          <th>N° Telefono</th>
+          <th>Ruolo</th>
+          <th>In Blacklist?</th>
+          <th>Data Creazione</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
+				$riga="<tr><td>".$arr['cf']."</td><td>".$arr['username']."</td><td>".$arr["nome"]."</td><td>".$arr["cognome"]."</td><td>".$arr["classe"]."</td><td>".$arr["sezione"]."</td><td>".$arr["n_aula"]."</td><td>".$arr["plesso"]."</td><td>".$arr["n_telefono"]."</td><td>".$arr["ruolo"]."<td>".$arr["blacklist"]."</td><td>".$arr["data_registrazione"]."</td></tr>";
 				echo $riga;
 			}
 			echo "</table>";

@@ -75,10 +75,13 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 
                     <li class="dropdown"><a href="#"><span>Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
+                                  <li><a href="admin/aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
+                                  <li><a href="admin/modifica_prodotto.php">Modifica Listino</a></li>
+                                  <li><a href="admin/rimuovi_prodotto.php">Rimuovi Prodotto</a></li>
                                   <li><a href="admin/visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
                                   <li><a href="admin/blacklista_utente.php">Blacklista utente</a></li>
-                                  <li><a href="#">Drop Down 3</a></li>
-                                  <li><a href="#">Drop Down 4</a></li>
+                                  <li><a href="admin/registra_utente.php">Registra Utente</a></li>
+                                  <li><a href="admin/visualizza_utenti.php">Visualizza Utenti</a></li>
                                 </ul>
                               </li>
 
@@ -108,7 +111,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
             <div class="carousel-container">
               <div class="carousel-content">
                 <h2 class="animate__animated animate__fadeInDown"><span>Bar</span> NewtonPertini</h2>
-                <p class="animate__animated animate__fadeInUp">Gusta le nostre prelibatezze previo vendita di 3 reni</p>
+                <p class="animate__animated animate__fadeInUp">Gusta le nostre prelibatezze</p>
                 <div>
                   <a href="#menu" class="btn-menu animate__animated animate__fadeInUp scrollto">Menu</a>
                   <a href="#book-a-table" class="btn-book animate__animated animate__fadeInUp scrollto">Prenota!</a>
@@ -158,7 +161,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
                   //print_r($array);
                   ?>
                  
-                    <div class="col-lg-6 menu-item "<?php echo "filter-".$array["tipo"]?>>
+                 <div class="col-lg-6 menu-item <?php echo "filter-".$array["tipo"] ?>">
                         <div class="menu-content">
                           <a href="#"><?php echo $array["nome"]?></a><span>€<?php echo $array["prezzo"]?></span>
                         </div>

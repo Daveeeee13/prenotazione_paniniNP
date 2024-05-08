@@ -75,22 +75,15 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
                   if($array["ruolo"]=="admin"){
                     ?>
 
-                          <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
-
+                              <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
-                                  <li><a href="#">Drop Down 1</a></li>
-                                  <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                                    <ul>
-                                      <li><a href="#">Deep Drop Down 1</a></li>
-                                      <li><a href="#">Deep Drop Down 2</a></li>
-                                      <li><a href="#">Deep Drop Down 3</a></li>
-                                      <li><a href="#">Deep Drop Down 4</a></li>
-                                      <li><a href="#">Deep Drop Down 5</a></li>
-                                    </ul>
-                                  </li>
-                                  <li><a href="#">Drop Down 2</a></li>
-                                  <li><a href="#">Drop Down 3</a></li>
-                                  <li><a href="#">Drop Down 4</a></li>
+                                  <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
+                                  <li><a href="modifica_prodotto.php">Modifica Listino</a></li>
+                                  <li><a href="rimuovi_prodotto.php">Rimuovi Prodotto</a></li>
+                                  <li><a href="visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
+                                  <li><a href="blacklista_utente.php">Blacklista utente</a></li>
+                                  <li><a href="registra_utente.php">Registra Utente</a></li>
+                                  <li><a href="visualizza_utenti.php">Visualizza Utenti</a></li>
                                 </ul>
                               </li>
 
@@ -120,10 +113,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Lista Prenotazioni</h2>
+          <h2>Blocca - Sblocca Utente</h2>
           <ol>
-            <li><a href="index.php">Home</a></li>
-            <li>Prenotazioni Eseguite</li>
+            <li><a href="../index.php">Home</a></li>
+            <li>Blacklist</li>
           </ol>
         </div>
 
@@ -158,7 +151,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
           <th>&nbsp;</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['cf']."</td><td>".$arr['username']."</td><td>".$arr["nome"]."</td><td>".$arr["cognome"]."</td><td>".$arr["classe"]."</td><td>".$arr["sezione"]."</td><td>".$arr["n_aula"]."</td><td>".$arr["plesso"]."</td><td>".$arr["n_telefono"]."</td><td>".$arr["ruolo"]."</td><td>".$arr["data_registrazione"]."</td><td><a href='blacklista_utente.php?cf=$arr[cf]'><img src='../assets/img/block.png'/></a></td></tr>";
+        //questo controllo serve per controllare se l'utente è blacklistato o no, facendo così l'immagine cambierà a seconda se l'utente è blacklistato o meno
+        if($arr["blacklist"]=="no"){
+          $riga="<tr><td>".$arr['cf']."</td><td>".$arr['username']."</td><td>".$arr["nome"]."</td><td>".$arr["cognome"]."</td><td>".$arr["classe"]."</td><td>".$arr["sezione"]."</td><td>".$arr["n_aula"]."</td><td>".$arr["plesso"]."</td><td>".$arr["n_telefono"]."</td><td>".$arr["ruolo"]."</td><td>".$arr["data_registrazione"]."</td><td><a href='blacklista_utente.php?cf=$arr[cf]'><img src='../assets/img/block.png'/></a></td></tr>";
+        }else $riga="<tr><td>".$arr['cf']."</td><td>".$arr['username']."</td><td>".$arr["nome"]."</td><td>".$arr["cognome"]."</td><td>".$arr["classe"]."</td><td>".$arr["sezione"]."</td><td>".$arr["n_aula"]."</td><td>".$arr["plesso"]."</td><td>".$arr["n_telefono"]."</td><td>".$arr["ruolo"]."</td><td>".$arr["data_registrazione"]."</td><td><a href='blacklista_utente.php?cf=$arr[cf]'><img src='../assets/img/unblock.png'/></a></td></tr>";
 				echo $riga;
 			}
 			echo "</table>";
@@ -167,13 +163,21 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 	catch (Exception $e) {
 	}
 
-        //RIMOZIONE PRENOTAZIONE
-        /*if (isset($_GET["numero_prenotazione"])) {
+        //AGGIORNAMENTO BLACKLIST
+        
+        if (isset($_GET["cf"])) {
 
           try {
             $connessione = mysqli_connect("localhost", "root", "root", "panini");
+            $sql ="SELECT * FROM utente WHERE CF='$_GET[cf]'";
+              $risultato = $connessione->query($sql);
+              $arr = $risultato->fetch_assoc();
             
-            $sql = "DELETE FROM prenotazioni WHERE n_prenotazione = ".$_GET["numero_prenotazione"].";";
+            //come sopra, con questo controllo effettuo la ricerca per vedere se l'utente è già blacklistato. Facendo così posso sbloccarlo
+            if($arr["blacklist"]=="no"){
+              $sql = "UPDATE utente SET blacklist='si' WHERE cf='$_GET[cf]';";
+            }else $sql = "UPDATE utente SET blacklist='no' WHERE cf='$_GET[cf]';";
+            
             $connessione->query($sql);
           }
           catch (Exception $e) {
@@ -182,7 +186,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
           $connessione->close();
           //header('Location: visualizza_prenotazioni.php');
            
-        }	*/
+        }	
 
 
 
@@ -195,24 +199,22 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
-      <h3>Delicious</h3>
-      <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi placeat.</p>
+      <h3>Bar NewtonPertini</h3>
+      <p>Prodotti offerti da nomeAzienda</p>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
         <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
         <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
       </div>
       <div class="copyright">
-        &copy; Copyright <strong><span>Delicious</span></strong>. All Rights Reserved
+        &copy; Copyright <strong><span>Bar NewtonPertini</span></strong>.
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/delicious-free-restaurant-bootstrap-theme/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>,
+        Developed by <a href="https://carrarodavide.it">Davide Carraro</a>
       </div>
     </div>
   </footer><!-- End Footer -->

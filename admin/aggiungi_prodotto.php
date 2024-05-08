@@ -12,7 +12,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Bar NP - Visualizza Prenotazioni</title>
+  <title>Bar NP - Aggiungi Prodotto</title>
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
@@ -75,7 +75,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
                   if($array["ruolo"]=="admin"){
                     ?>
 
-                              <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
+                            <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
                                   <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
                                   <li><a href="modifica_prodotto.php">Modifica Listino</a></li>
@@ -113,10 +113,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Lista Prenotazioni</h2>
+          <h2>Aggiungi prodotto</h2>
           <ol>
-            <li><a href="index.php">Home</a></li>
-            <li>Prenotazioni Eseguite</li>
+            <li><a href="../index.php">Home</a></li>
+            <li>Aggiungi prodotto</li>
           </ol>
         </div>
 
@@ -125,61 +125,94 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
     <section class="inner-page">
       <div class="container">
-      <?php
 
-	try {
+        <form action="aggiungi_prodotto.php" method="post">
 
-    //VISUALIZZO TUTTE LE PRENOTAZIONI
-		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM prenotazioni";  
-	
-		$risultato = $connessione->query($sql);
-		$num_righe = $risultato->num_rows;
-		if ($num_righe > 0) {
-			echo "<table id='utenti' class='tabella'>
-				<tr>
-          <th>Utente</th>
-					<th>N° prenotazione (per ritiro)</th>
-					<th>Data ritiro</th>
-					<th>Quantità panino con cotto</th>
-          <th>Quantità panino con soppressa</th>
-          <th>Quantità panino con crudo</th>
-          <th>Quantità panino con formaggio</th>
-          <th>Quantità pizza margherita</th>
-          <th>Quantità brioche</th>
-          <th>Plesso Ritiro</th>
-          <th>&nbsp;</th>
-				</tr>";
-			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
-				echo $riga;
-			}
-			echo "</table>";
-		}
-	}
-	catch (Exception $e) {
-	}
+        <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Nome prodotto: <input type="text" name="nome" placeholder="Es. Panino al cotto">
+              <div class="validate"></div>
+            </div>
+          </div>
 
-        //RIMOZIONE PRENOTAZIONE
-        if (isset($_GET["numero_prenotazione"])) {
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Nome Gestionale: <input type="text" name="nome_gestionale" placeholder="Es. panino_cotto">
+              <div class="validate"></div>
+            </div>
+          </div>
 
-          try {
-            $connessione = mysqli_connect("localhost", "root", "root", "panini");
-            
-            $sql = "DELETE FROM prenotazioni WHERE n_prenotazione = ".$_GET["numero_prenotazione"].";";
-            $connessione->query($sql);
-          }
-          catch (Exception $e) {
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Quantità: <input type="number" name="quantita" >
+              <div class="validate"></div>
+            </div>
+          </div>
 
-          }
-          $connessione->close();
-          //header('Location: visualizza_prenotazioni.php');
-           
-        }	
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Ingredienti: <input type="text" name="ingredienti" placeholder="Es. crema, panna">
+              <div class="validate"></div>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Prezzo: <input type="text" name="prezzo" placeholder="Es. 2.50">
+              <div class="validate"></div>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+          <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+      Tipo:
+            <select name="tipo">
+              <option value="panino">Panino</option>
+              <option value="brioche">Brioche</option>
+              <option value="pizza">Pizza</option>
+            </select>
+            <div class="validate"></div>
+            </div>
+          </div>
+          <div class="mb-3">
+          </div>
+          <div class="text-center"><button style="background: #ffa012; border: 0; padding: 10px 24px; border-radius: 50px;" type="submit" name="invio">Aggiungi Prodotto</button></div>
+        </form>
+
+
+        <?php
+      if(isset($_POST["invio"])){
+        
+        try {			
+ 
+          $connessione = mysqli_connect("localhost", "root", "root", "panini");
+
+            $sql = "INSERT INTO listino (nome, nome_gestionale, quantita, ingredienti, tipo, prezzo) VALUES ('".
+              $_POST["nome"]."','".
+              $_POST["nome_gestionale"]."','".
+              $_POST["quantita"]."','".
+              $_POST["ingredienti"]."','".
+              $_POST["tipo"]."','".
+              $_POST["prezzo"]
+              ."');";
+              
+            $risultato=$connessione->query($sql);
+        
+        }
+        catch (Exception $e) {
+        
+        }
+        $connessione -> close();
+
+        if($risultato){
+          echo "Aggiunto correttamente!";
+        }
+
+      }
 
 
 ?>
+
+
       </div>
     </section>
 

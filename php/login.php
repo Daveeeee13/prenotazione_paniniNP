@@ -19,11 +19,13 @@ if (isset($_POST["login"])) {
         // Query SQL per il login
         $sql = "SELECT * FROM utente WHERE username='$username' AND pwd='$password'";
         $risultato = $connessione->query($sql);
+        $arr = $risultato->fetch_assoc();
 
-        if ($risultato && $risultato->num_rows > 0) {
+        if ($risultato && $risultato->num_rows > 0 && $arr["blacklist"]=="no") {
             // Utente trovato, imposto le variabili di sessione
             $_SESSION["AUTENTICATO"] = "ok";
             $_SESSION["USER"] = $username;
+            $_SESSION["RUOLO"]=$arr["ruolo"];
 
             $connessione->close();
 
@@ -65,7 +67,7 @@ if (isset($_POST["login"])) {
         <input required type="password" name="password" placeholder="Password"><br><br>
         <input style="background-color:#DAF7A6" name="login" type="submit" value="Login">
     </form>
-    <button style="background-color:gray" type="submit" name="redirectAccount" onclick="redirectAccount();">o registra un account</button>
+    <!--<button style="background-color:gray" type="submit" name="redirectAccount" onclick="redirectAccount();">o registra un account</button>-->
 </div>
 
 </body>

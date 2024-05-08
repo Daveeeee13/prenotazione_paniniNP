@@ -12,7 +12,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Bar NP - Visualizza Prenotazioni</title>
+  <title>Bar NP - Modifica Prodotto</title>
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
@@ -113,10 +113,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Lista Prenotazioni</h2>
+          <h2>Modifica prodotto</h2>
           <ol>
-            <li><a href="index.php">Home</a></li>
-            <li>Prenotazioni Eseguite</li>
+            <li><a href="../index.php">Home</a></li>
+            <li>Modifica Prodotto</li>
           </ol>
         </div>
 
@@ -127,59 +127,136 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
       <?php
 
-	try {
-
-    //VISUALIZZO TUTTE LE PRENOTAZIONI
-		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM prenotazioni";  
 	
-		$risultato = $connessione->query($sql);
-		$num_righe = $risultato->num_rows;
-		if ($num_righe > 0) {
-			echo "<table id='utenti' class='tabella'>
-				<tr>
-          <th>Utente</th>
-					<th>N° prenotazione (per ritiro)</th>
-					<th>Data ritiro</th>
-					<th>Quantità panino con cotto</th>
-          <th>Quantità panino con soppressa</th>
-          <th>Quantità panino con crudo</th>
-          <th>Quantità panino con formaggio</th>
-          <th>Quantità pizza margherita</th>
-          <th>Quantità brioche</th>
-          <th>Plesso Ritiro</th>
-          <th>&nbsp;</th>
-				</tr>";
-			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
-				echo $riga;
-			}
-			echo "</table>";
-		}
+
+    //se non è cliccato il pulsante stampa tutti gli utenti
+    if(!isset($_GET["id"])){
+      try {
+      $connessione = mysqli_connect("localhost", "root", "root", "panini");
+      $sql ="SELECT * FROM listino";  
+    
+      $risultato = $connessione->query($sql);
+      $num_righe = $risultato->num_rows;
+      if ($num_righe > 0) {
+        echo "<table id='utenti' class='tabella'>
+          <tr>
+            <th>id</th>
+            <th>Nome</th>
+            <th>Ingredienti</th>
+            <th>Quantità</th>
+            <th>Prezzo</th>
+            <th>Tipo</th>
+          </tr>";
+        while ($arr = $risultato->fetch_assoc()) {
+          //questo controllo serve per controllare se l'utente è blacklistato o no, facendo così l'immagine cambierà a seconda se l'utente è blacklistato o meno
+            $riga="<tr><td>".$arr['id']."</td><td>".$arr['nome']."</td><td>".$arr["ingredienti"]."</td><td>".$arr["quantita"]."</td><td>".$arr["prezzo"]."</td><td>".$arr["tipo"]."</td><td><a href='modifica_prodotto.php?id=$arr[id]'><img src='../assets/img/modify.png'/></a></td></tr>";
+            echo $riga;
+        }
+        echo "</table>";
+      }
+      $connessione->close();
+    }
+    catch (Exception $e) {
+    }
+		
 	}
-	catch (Exception $e) {
-	}
+        //se ho cliccato l'id, prende dal DB le informazioni corrispondenti a quell'id nella tabella e mi precompila il form
+        try{
+        if (isset($_GET["id"])) {
+          $connessione = mysqli_connect("localhost", "root", "root", "panini");
+          $sql ="SELECT id, nome, nome_gestionale, quantita, ingredienti, prezzo, tipo FROM listino WHERE id='$_GET[id]'"; 
+          $risultato = $connessione->query($sql); 
+          $arr = $risultato->fetch_assoc();
+        ?>
 
-        //RIMOZIONE PRENOTAZIONE
-        if (isset($_GET["numero_prenotazione"])) {
+        <form action="modifica_prodotto.php" method="post">
+        <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              ID: <input disabled type="number" name="id" value="<?php echo $arr["id"]?>">
+              <div class="validate"></div>
+            </div>
+          </div>
 
-          try {
-            $connessione = mysqli_connect("localhost", "root", "root", "panini");
-            
-            $sql = "DELETE FROM prenotazioni WHERE n_prenotazione = ".$_GET["numero_prenotazione"].";";
-            $connessione->query($sql);
-          }
-          catch (Exception $e) {
+        <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Nome: <input type="text" name="nome" value="<?php echo $arr["nome"]?>">
+              <div class="validate"></div>
+            </div>
+          </div>
 
-          }
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Nome Gestionale: <input type="text" name="nome_gestionale" value="<?php echo $arr["nome_gestionale"]?>">
+              <div class="validate"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Quantità: <input type="number" name="quantita" value="<?php echo $arr["quantita"]?>">
+              <div class="validate"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Ingredienti: <input type="text" name="ingredienti" value="<?php echo $arr["ingredienti"]?>">
+              <div class="validate"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+              Prezzo: <input type="text" name="prezzo" value="<?php echo $arr["prezzo"]?>">
+              <div class="validate"></div>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+          <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
+      Tipo:
+            <select name="tipo">
+              <option value="panino">Panino</option>
+              <option value="brioche">Brioche</option>
+              <option value="pizza">Pizza</option>
+            </select>
+            <div class="validate"></div>
+            </div>
+          </div>
+          <div class="mb-3">
+          </div>
+          <div class="text-center"><button style="background: #ffa012; border: 0; padding: 10px 24px; border-radius: 50px;" type="submit" name="invio">Modifica Prodotto</button></div>
+        </form>
+
+
+        <?php
+
           $connessione->close();
-          //header('Location: visualizza_prenotazioni.php');
-           
         }	
+      }catch (Exception $e) {
+      }
+
+      
+      //form aggiornato, update nel DB
+      if(isset($_POST["invio"])){
+        try {
+          $connessione = mysqli_connect("localhost", "root", "root", "panini");
+          $sql = "UPDATE listino SET nome='$_POST[nome]', nome_gestionale='$_POST[nome_gestionale]', quantita='$_POST[quantita]', ingredienti='$_POST[ingredienti]', prezzo='$_POST[prezzo]', tipo='$_POST[tipo]' WHERE id='$_POST[id]';";
+            
+          $connessione->query($sql);
+
+        }
+        catch (Exception $e) {
+
+        }
+        $connessione->close();
+        //header('Location: modifica_prodotto.php');
+      }
 
 
 
 ?>
+
+
       </div>
     </section>
 
