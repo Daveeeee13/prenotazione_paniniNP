@@ -7,16 +7,12 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 }
 
 if (isset($_POST["invio"])) {
-
+    
 try {			
  
   $connessione = mysqli_connect("localhost", "root", "root", "panini");
 
-  $sql = "SELECT * FROM utente WHERE username = '".$_POST["username"]."';";
-  $risultato = $connessione->query($sql);
-  
- 
-  if (!$risultato) {
+    
     $sql = "INSERT INTO utente (cf, username, pwd, nome, cognome, classe, sezione, n_aula, plesso, n_telefono, ruolo, blacklist, data_registrazione) VALUES ('".
       $_POST["CF"]."','".
       $_POST["username"]."','".
@@ -34,21 +30,15 @@ try {
       ."');";
       
     $connessione->query($sql);
-
-  }
+    header("Location: visualizza_utenti.php");
+    exit();
 }
 catch (Exception $e) {
 
 }
 $connessione -> close();
-
-header("Location: visualizza_utenti.php");
-    exit();
+  
 }   
-
-
-
-
 
 ?>
 <html lang="en">
@@ -101,7 +91,7 @@ header("Location: visualizza_utenti.php");
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">Bar NP</a></h1>
+        <h1><a href="../index.php">Bar NP</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
@@ -122,13 +112,14 @@ header("Location: visualizza_utenti.php");
 
                               <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
-                                  <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
+                                <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
                                   <li><a href="modifica_prodotto.php">Modifica Listino</a></li>
                                   <li><a href="rimuovi_prodotto.php">Rimuovi Prodotto</a></li>
                                   <li><a href="visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
                                   <li><a href="blacklista_utente.php">Blacklista utente</a></li>
                                   <li><a href="registra_utente.php">Registra Utente</a></li>
                                   <li><a href="visualizza_utenti.php">Visualizza Utenti</a></li>
+                                  <li><a href="rimuovi_utente.php">Rimuovi Utente</a></li>
                                 </ul>
                               </li>
 
@@ -146,7 +137,7 @@ header("Location: visualizza_utenti.php");
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="php/logout.php" class="book-a-table-btn scrollto">Logout</a>
+      <a href="../php/logout.php" class="book-a-table-btn scrollto">Logout</a>
 
     </div>
   </header><!-- End Header -->
@@ -160,7 +151,7 @@ header("Location: visualizza_utenti.php");
         <div class="d-flex justify-content-between align-items-center">
           <h2>Registra utente</h2>
           <ol>
-            <li><a href="index.php">Home</a></li>
+            <li><a href="../index.php">Home</a></li>
             <li>Registra nuovo utente</li>
           </ol>
         </div>
@@ -171,7 +162,7 @@ header("Location: visualizza_utenti.php");
     <section class="inner-page">
       <div class="container">
      
-      <form action="risultato_prenotazione.php" method="post">
+      <form action="registra_utente.php" method="post">
       <div class="form-group mt-3">
         <b>CF: </b>
           <input type="text" required name="CF" id="CF" placeholder="Inserisci il CF dell'utente">

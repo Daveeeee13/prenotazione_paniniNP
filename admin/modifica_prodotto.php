@@ -56,7 +56,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">Bar NP</a></h1>
+        <h1><a href="../index.php">Bar NP</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
@@ -77,13 +77,14 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
                               <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
-                                  <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
+                                <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
                                   <li><a href="modifica_prodotto.php">Modifica Listino</a></li>
                                   <li><a href="rimuovi_prodotto.php">Rimuovi Prodotto</a></li>
                                   <li><a href="visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
                                   <li><a href="blacklista_utente.php">Blacklista utente</a></li>
                                   <li><a href="registra_utente.php">Registra Utente</a></li>
                                   <li><a href="visualizza_utenti.php">Visualizza Utenti</a></li>
+                                  <li><a href="rimuovi_utente.php">Rimuovi Utente</a></li>
                                 </ul>
                               </li>
 
@@ -101,7 +102,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="php/logout.php" class="book-a-table-btn scrollto">Logout</a>
+      <a href="../php/logout.php" class="book-a-table-btn scrollto">Logout</a>
 
     </div>
   </header><!-- End Header -->
@@ -149,7 +150,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
           </tr>";
         while ($arr = $risultato->fetch_assoc()) {
           //questo controllo serve per controllare se l'utente è blacklistato o no, facendo così l'immagine cambierà a seconda se l'utente è blacklistato o meno
-            $riga="<tr><td>".$arr['id']."</td><td>".$arr['nome']."</td><td>".$arr["ingredienti"]."</td><td>".$arr["quantita"]."</td><td>".$arr["prezzo"]."</td><td>".$arr["tipo"]."</td><td><a href='modifica_prodotto.php?id=$arr[id]'><img src='../assets/img/modify.png'/></a></td></tr>";
+            $riga="<tr><td>".$arr['id']."</td><td>".$arr['nome']."</td><td>".$arr["ingredienti"]."</td><td>".$arr["quantita"]."</td><td>".$arr["prezzo"]."€</td><td>".$arr["tipo"]."</td><td><a href='modifica_prodotto.php?id=$arr[id]'><img src='../assets/img/modify.png'/></a></td></tr>";
             echo $riga;
         }
         echo "</table>";
@@ -172,7 +173,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
         <form action="modifica_prodotto.php" method="post">
         <div class="row">
             <div class="text-center" class="col-lg-4 col-md-6 form-group mt-3">
-              ID: <input disabled type="number" name="id" value="<?php echo $arr["id"]?>">
+              ID: <input readonly type="number" name="ID" value="<?php echo $arr["id"]?>">
               <div class="validate"></div>
             </div>
           </div>
@@ -237,11 +238,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
       
       //form aggiornato, update nel DB
-      if(isset($_POST["invio"])){
+      if(isset($_POST["invio"]) and isset($_POST["ID"])){
         try {
           $connessione = mysqli_connect("localhost", "root", "root", "panini");
-          $sql = "UPDATE listino SET nome='$_POST[nome]', nome_gestionale='$_POST[nome_gestionale]', quantita='$_POST[quantita]', ingredienti='$_POST[ingredienti]', prezzo='$_POST[prezzo]', tipo='$_POST[tipo]' WHERE id='$_POST[id]';";
-            
+          $sql = "UPDATE listino SET nome='$_POST[nome]', nome_gestionale='$_POST[nome_gestionale]', quantita='$_POST[quantita]', ingredienti='$_POST[ingredienti]', prezzo='$_POST[prezzo]', tipo='$_POST[tipo]' WHERE id='$_POST[ID]';";
           $connessione->query($sql);
 
         }

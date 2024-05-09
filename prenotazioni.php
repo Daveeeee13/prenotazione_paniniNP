@@ -56,7 +56,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">Bar NP</a></h1>
+        <h1><a href="index.php">Bar NP</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
@@ -77,13 +77,14 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
 
                           <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
-                                  <li><a href="admin/aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
+                                <li><a href="admin/aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
                                   <li><a href="admin/modifica_prodotto.php">Modifica Listino</a></li>
                                   <li><a href="admin/rimuovi_prodotto.php">Rimuovi Prodotto</a></li>
                                   <li><a href="admin/visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
                                   <li><a href="admin/blacklista_utente.php">Blacklista utente</a></li>
                                   <li><a href="admin/registra_utente.php">Registra Utente</a></li>
                                   <li><a href="admin/visualizza_utenti.php">Visualizza Utenti</a></li>
+                                  <li><a href="admin/rimuovi_utente.php">Rimuovi Utente</a></li>
                                 </ul>
                               </li>
                               

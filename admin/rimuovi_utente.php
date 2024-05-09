@@ -12,7 +12,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Bar NP - Rimuovi Prodotto</title>
+  <title>Bar NP - Rimuovi Utente</title>
 
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
@@ -114,10 +114,10 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Rimuovi Prodotto</h2>
+          <h2>Rimuovi Utente</h2>
           <ol>
             <li><a href="../index.php">Home</a></li>
-            <li>Rimuovi Prodotto</li>
+            <li>Rimuovi Utente</li>
           </ol>
         </div>
 
@@ -131,24 +131,31 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 	try {
 
 		$connessione = mysqli_connect("localhost", "root", "root", "panini");
-		$sql ="SELECT * FROM listino";  
+		$sql ="SELECT * FROM utente";  
 	
 		$risultato = $connessione->query($sql);
 		$num_righe = $risultato->num_rows;
 		if ($num_righe > 0) {
 			echo "<table id='utenti' class='tabella'>
 				<tr>
-          <th>id</th>
-					<th>Nome</th>
-					<th>Quantità</th>
-					<th>Ingredienti</th>
-          <th>Prezzo</th>
-          <th>&nbsp;</th>
+        <th>CF</th>
+        <th>Username</th>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Classe</th>
+        <th>Sezione</th>
+        <th>N° Aula</th>
+        <th>Plesso</th>
+        <th>N° Telefono</th>
+        <th>Ruolo</th>
+        <th>In Blacklist?</th>
+        <th>Data Creazione</th>
+        <th>&nbsp;</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
         //questo controllo serve per controllare se l'utente è blacklistato o no, facendo così l'immagine cambierà a seconda se l'utente è blacklistato o meno
 
-          $riga="<tr><td>".$arr['id']."</td><td>".$arr['nome']."</td><td>".$arr["quantita"]."</td><td>".$arr["ingredienti"]."</td><td>".$arr["prezzo"]."</td><td><a href='rimuovi_prodotto.php?id=$arr[id]'><img src='../assets/img/delete_material_design.png'/></a></td></tr>";
+          $riga="<tr><td>".$arr['cf']."</td><td>".$arr['username']."</td><td>".$arr["nome"]."</td><td>".$arr["cognome"]."</td><td>".$arr["classe"]."</td><td>".$arr["sezione"]."</td><td>".$arr["n_aula"]."</td><td>".$arr["plesso"]."</td><td>".$arr["n_telefono"]."</td><td>".$arr["ruolo"]."<td>".$arr["blacklist"]."</td><td>".$arr["data_registrazione"]."</td><td><a href='rimuovi_utente.php?cf=$arr[cf]'><img src='../assets/img/delete_material_design.png'/></a></td></tr>";
   				echo $riga;
 			}
 			echo "</table>";
@@ -159,11 +166,11 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
         //AGGIORNAMENTO BLACKLIST
         
-        if (isset($_GET["id"])) {
+        if (isset($_GET["cf"])) {
 
           try {
             $connessione = mysqli_connect("localhost", "root", "root", "panini");
-            $sql = "DELETE FROM listino WHERE id='$_GET[id]'";
+            $sql = "DELETE FROM utente WHERE cf='$_GET[cf]'";
               $risultato = $connessione->query($sql);
                 
             $connessione->query($sql);

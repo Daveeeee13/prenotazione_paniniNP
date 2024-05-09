@@ -56,7 +56,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">Bar NP</a></h1>
+        <h1><a href="../index.php">Bar NP</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
@@ -77,13 +77,14 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
 
                               <li class="dropdown"><a href="#"><span style="color: black;">Amministrazione</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
-                                  <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
+                                <li><a href="aggiungi_prodotto.php">Aggiungi Prodotto</a></li>
                                   <li><a href="modifica_prodotto.php">Modifica Listino</a></li>
                                   <li><a href="rimuovi_prodotto.php">Rimuovi Prodotto</a></li>
                                   <li><a href="visualizza_prenotazioni.php">Visualizza Prenotazioni</a></li>
                                   <li><a href="blacklista_utente.php">Blacklista utente</a></li>
                                   <li><a href="registra_utente.php">Registra Utente</a></li>
                                   <li><a href="visualizza_utenti.php">Visualizza Utenti</a></li>
+                                  <li><a href="rimuovi_utente.php">Rimuovi Utente</a></li>
                                 </ul>
                               </li>
 
@@ -101,7 +102,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="php/logout.php" class="book-a-table-btn scrollto">Logout</a>
+      <a href="../php/logout.php" class="book-a-table-btn scrollto">Logout</a>
 
     </div>
   </header><!-- End Header -->
@@ -115,7 +116,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
         <div class="d-flex justify-content-between align-items-center">
           <h2>Lista Prenotazioni</h2>
           <ol>
-            <li><a href="index.php">Home</a></li>
+            <li><a href="../index.php">Home</a></li>
             <li>Prenotazioni Eseguite</li>
           </ol>
         </div>

@@ -57,7 +57,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">Bar NP</a></h1>
+        <h1><a href="index.php">Bar NP</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
@@ -82,6 +82,7 @@ if(!$_SESSION["AUTENTICATO"]=="ok"){
                                   <li><a href="admin/blacklista_utente.php">Blacklista utente</a></li>
                                   <li><a href="admin/registra_utente.php">Registra Utente</a></li>
                                   <li><a href="admin/visualizza_utenti.php">Visualizza Utenti</a></li>
+                                  <li><a href="admin/rimuovi_utente.php">Rimuovi Utente</a></li>
                                 </ul>
                               </li>
 
