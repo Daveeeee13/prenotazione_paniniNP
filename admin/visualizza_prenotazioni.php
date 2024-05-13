@@ -142,6 +142,7 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
           <th>Utente</th>
 					<th>N° prenotazione (per ritiro)</th>
 					<th>Data ritiro</th>
+          <th>Prezzo</th>
 					<th>Quantità panino con cotto</th>
           <th>Quantità panino con soppressa</th>
           <th>Quantità panino con crudo</th>
@@ -152,7 +153,8 @@ if((!$_SESSION["AUTENTICATO"]=="ok") or !$_SESSION["RUOLO"]=="admin"){
           <th>&nbsp;</th>
 				</tr>";
 			while ($arr = $risultato->fetch_assoc()) {
-				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
+        $prezzo=($arr["panino_cotto"]*2.5)+($arr["panino_crudo"]*2.5)+($arr["panino_crudo"]*2.5)+($arr["panino_formaggio"]*2.5)+($arr["pizza_margherita"]*2.5)+($arr["brioche"]*3);
+				$riga="<tr><td>".$arr['username']."</td><td>".$arr['n_prenotazione']."</td><td>".$arr["data_ritiro"]."</td><td>".$prezzo."€</td><td>".$arr["panino_cotto"]."</td><td>".$arr["panino_soppressa"]."</td><td>".$arr["panino_crudo"]."</td><td>".$arr["panino_formaggio"]."</td><td>".$arr["pizza_margherita"]."</td><td>".$arr["brioche"]."</td><td>".$arr["plesso_ritiro"]."<td><a href='visualizza_prenotazioni.php?numero_prenotazione=".$arr["n_prenotazione"]."'><img src='../assets/img/delete_material_design.png' /></a></td></tr>";
 				echo $riga;
 			}
 			echo "</table>";
